@@ -6,21 +6,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
 
 public class Main extends Application {
+   
+
 
     @Override
     public void start(Stage stage) throws Exception {
-        // 1. Configuración de la ventana principal (Estudiantes)
-        final FXMLLoader estudiantesLoader = new FXMLLoader(getClass().getResource("/views/CRUDEstudiantes.fxml"));
-        final Scene estudiantesScene = new Scene(estudiantesLoader.load());
 
-        stage.setScene(estudiantesScene);
-        stage.setTitle("Estudiantes");
-        stage.show();
+
+        
+
+
+
+        // 1. Configuración de la ventana principal (Estudiantes)
+        final FXMLLoader estudiantesLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDEstudiantes.fxml"));
+final Scene estudiantesScene = new Scene(estudiantesLoader.load());
+
+stage.setScene(estudiantesScene);
+stage.setTitle("Estudiantes");
+stage.show();
 
         // 2. Configuración de la ventana de Cursos (Nueva)
         try {
             
-            final FXMLLoader cursosLoader = new FXMLLoader(getClass().getResource("/views/CRUDCursos.fxml"));
+            final FXMLLoader cursosLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDCursos.fxml"));
             final Stage cursosStage = new Stage();
             cursosStage.setScene(new Scene(cursosLoader.load()));
             cursosStage.setTitle("Cursos");
@@ -33,7 +41,7 @@ public class Main extends Application {
        
         try {
             // NOTA: Asumo que el archivo se llama CRUDDocentes.fxml y existe en /views/
-            final FXMLLoader docentesLoader = new FXMLLoader(getClass().getResource("/views/CRUDDocentes.fxml"));
+            final FXMLLoader docentesLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDDocentes.fxml"));
             final Stage docentesStage = new Stage();
             docentesStage.setScene(new Scene(docentesLoader.load()));
             docentesStage.setTitle("Docentes");

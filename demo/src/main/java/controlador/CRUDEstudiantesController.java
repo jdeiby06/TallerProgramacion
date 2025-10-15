@@ -1,15 +1,14 @@
 package controlador;
 
-
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import modelo.Estudiante;
 import config.AppServices;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class CRUDEstudiantesController {
 
@@ -23,68 +22,107 @@ public class CRUDEstudiantesController {
 
     final Alert warningAlert = new Alert(Alert.AlertType.WARNING);
 
-    @FXML void registrarEstudiante(ActionEvent event) {
-        if (txtId.getText().isEmpty() && !txtNombre.getText().isEmpty() && !txtEdad.getText().isEmpty()) {
-            AppServices.getEstudiante().registrarEstudiante(txtNombre.getText(), Integer.parseInt(txtEdad.getText()));
-            actualizarTabla();
-        } else if (txtNombre.getText().isEmpty() || txtEdad.getText().isEmpty()) {
+    // ==================== REGISTRAR ====================
+    @FXML
+    void registrarEstudiante(ActionEvent event) {
+        // Validar campos vacíos
+        if (txtNombre.getText().isEmpty() || txtEdad.getText().isEmpty()) {
+            warningAlert.setTitle("Advertencia");
             warningAlert.setContentText("Complete la información necesaria para registrar el estudiante.");
             warningAlert.show();
-        } else {
-            warningAlert.setContentText("Limpie los campos para registrar el estudiante.");
-            warningAlert.show();
+            return;
         }
+
+        // Validar si hay ID (significa que seleccionaste un estudiante)
+        if (!txtId.getText().isEmpty()) {
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setContentText("Limpie los campos antes de registrar un nuevo estudiante.");
+            warningAlert.show();
+            return;
+        }
+
+        // Registrar estudiante
+        AppServices.getEstudiante().registrarEstudiante(
+                txtNombre.getText(),
+                Integer.parseInt(txtEdad.getText())
+        );
+
+        // Actualizar y limpiar
+        actualizarTabla();
+        limpiarCampos(null);
     }
 
-    @FXML void actualizarEstudiante(ActionEvent event) {
+    // ==================== ACTUALIZAR ====================
+    @FXML
+    void actualizarEstudiante(ActionEvent event) {
         if (!txtId.getText().isEmpty()) {
-            AppServices.getEstudiante().actualizarEstudiante(Integer.parseInt(txtId.getText()), txtNombre.getText(), Integer.parseInt(txtEdad.getText()));
+            AppServices.getEstudiante().actualizarEstudiante(
+                    Integer.parseInt(txtId.getText()),
+                    txtNombre.getText(),
+                    Integer.parseInt(txtEdad.getText())
+            );
             actualizarTabla();
+            limpiarCampos(null);
         } else {
+            warningAlert.setTitle("Advertencia");
             warningAlert.setContentText("Seleccione un estudiante para actualizar.");
             warningAlert.show();
         }
     }
 
-    @FXML void eliminarEstudiante(ActionEvent event) {
+    // ==================== ELIMINAR ====================
+    @FXML
+    void eliminarEstudiante(ActionEvent event) {
         if (!txtId.getText().isEmpty()) {
             AppServices.getEstudiante().eliminarEstudiantes(Integer.parseInt(txtId.getText()));
             actualizarTabla();
+            limpiarCampos(null);
         } else {
+            warningAlert.setTitle("Advertencia");
             warningAlert.setContentText("Seleccione un estudiante para eliminar.");
             warningAlert.show();
         }
     }
 
-    @FXML void limpiarCampos(ActionEvent event) {
+    // ==================== LIMPIAR ====================
+    @FXML
+    void limpiarCampos(ActionEvent event) {
         txtId.clear();
         txtNombre.clear();
         txtEdad.clear();
         tblEstudiantes.getSelectionModel().clearSelection();
     }
 
-    @FXML void refrescarTabla(ActionEvent event) {
+    // ==================== REFRESCAR ====================
+    @FXML
+    void refrescarTabla(ActionEvent event) {
         actualizarTabla();
     }
 
+    // ==================== ACTUALIZAR TABLA ====================
     private void actualizarTabla() {
         tblEstudiantes.getItems().clear();
-        tblEstudiantes.getItems().addAll(AppServices.getEstudiante());
+        tblEstudiantes.getItems().addAll(AppServices.getEstudiante().obtenerEstudiantes());
     }
 
+    // ==================== INICIALIZAR ====================
     public void initialize() {
         warningAlert.setTitle("Advertencia");
 
+        // Configurar columnas
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colEdad.setCellValueFactory(new PropertyValueFactory<>("edad"));
 
+        // Cargar datos iniciales
         tblEstudiantes.getItems().addAll(AppServices.getEstudiante().obtenerEstudiantes());
-        tblEstudiantes.getSelectionModel().selectedItemProperty().addListener((ignoredObservableValue, oldValue, newValue) -> {
-            if (newValue != null) {
-                txtId.setText(String.valueOf(tblEstudiantes.getSelectionModel().getSelectedItem().getId()));
-                txtNombre.setText(tblEstudiantes.getSelectionModel().getSelectedItem().getNombre());
-                txtEdad.setText(String.valueOf(tblEstudiantes.getSelectionModel().getSelectedItem().getEdad()));
+
+        // Detectar selección de fila
+        tblEstudiantes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                txtId.setText(String.valueOf(newVal.getId()));
+                txtNombre.setText(newVal.getNombre());
+                txtEdad.setText(String.valueOf(newVal.getEdad()));
             }
         });
     }

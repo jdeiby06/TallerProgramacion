@@ -25,9 +25,9 @@ public class ConexionBDD {
 
         Class.forName("org.postgresql.Driver");
 
-        String url = properties.get("URL").toString();
-        String username = properties.get("USERNAME").toString();
-        String password = properties.get("PASSWORD").toString();
+        String url = properties.get("jdbc:mysql://127.0.0.1:3306/?user=root").toString();
+        String username = properties.get("root").toString();
+        String password = properties.get("12345").toString();
 
         connection = DriverManager.getConnection(url, username, password);
       }
