@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.sql.Connection;
 import javafx.scene.control.Alert;
 import java.sql.PreparedStatement;
-import com.uniajc.mvn.services.ConexionBDD; // Asumo que esta clase es correcta
+import Services.ConexionBDD; // Asumo que esta clase es correcta
 
 public class Docente {
 

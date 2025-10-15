@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.sql.Connection;
 import javafx.scene.control.Alert;
 import java.sql.PreparedStatement;
-import services.ConexionBDD;
+import Services.ConexionBDD;
 
 public class Estudiante {
 

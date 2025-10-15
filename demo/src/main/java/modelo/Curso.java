@@ -1,4 +1,4 @@
-package com.uniajc.mvn.modelo;
+package modelo;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.sql.Connection;
 import javafx.scene.control.Alert;
 import java.sql.PreparedStatement;
-import com.uniajc.mvn.services.ConexionBDD; // Asumo que esta clase es accesible
+import Services.ConexionBDD; // Asumo que esta clase es accesible
 
 /**
  * Clase de modelo para representar un Curso y manejar sus operaciones
  * CRUD con la base de datos.
  */
 public class Curso {
+    
 
     private int id;
     private String nombre; // e.g., "Matemáticas", "Inglés"
