@@ -37,7 +37,7 @@
                                  </font>
                               </Label>
                               <Pane HBox.hgrow="ALWAYS" />
-                              <TextField fx:id="txtId" editable="false" prefWidth="250.0" />
+                              <TextField fx:id="txtId" editable="true" prefWidth="250.0" />
                            </children>
                         </HBox>
                         <Separator />

@@ -1,9 +1,10 @@
 controlador\CRUDEstudiantesController.class
 config\AppServices.class
+modelo\Estudiante.class
+modelo\DocenteService.class
+controlador\CRUDDocentesController.class
 controlador\CRUDCursosController.class
 modelo\Docente.class
 com\uniajc\mvn\Main.class
-modelo\Estudiante.class
 Services\ConexionBDD.class
 modelo\Curso.class
-controlador\CRUDDocentesController.class

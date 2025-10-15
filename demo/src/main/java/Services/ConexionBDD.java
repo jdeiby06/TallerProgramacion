@@ -1,47 +1,47 @@
 package Services;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.util.Properties;
-import java.sql.SQLException;
 import java.sql.DriverManager;
-import java.io.FileInputStream;
+import java.sql.SQLException;
 import javafx.scene.control.Alert;
 
 public class ConexionBDD {
 
-  private static Connection connection = null;
-  final private static Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    private static Connection connection = null;
+    private static final Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
-  public static Connection getConnection() {
+    public static Connection getConnection() {
+        errorAlert.setTitle("Error de conexión");
 
-    errorAlert.setTitle("Error");
+        try {
+            if (connection == null || connection.isClosed()) {
 
-    try {
-      if (connection == null || connection.isClosed()) {
+                // 🔧 Datos de conexión
+                String host = "127.0.0.1";
+                String database = "uniajc_db";
+                String user = "root";
+                String password = "12345";
 
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(("config.properties")));
+                // ✅ URL JDBC para MySQL
+                String url = "jdbc:mysql://" + host + ":3306/" + database + "?useSSL=false&serverTimezone=UTC";
 
-        Class.forName("org.postgresql.Driver");
+                // ✅ Cargar el driver de MySQL
+                Class.forName("com.mysql.cj.jdbc.Driver");
 
-        String url = properties.get("jdbc:mysql://127.0.0.1:3306/?user=root").toString();
-        String username = properties.get("root").toString();
-        String password = properties.get("12345").toString();
+                // ✅ Intentar conectar
+                connection = DriverManager.getConnection(url, user, password);
+                System.out.println("✅ Conexión exitosa a la base de datos " + database);
+            }
 
-        connection = DriverManager.getConnection(url, username, password);
-      }
-    } catch (ClassNotFoundException e) {
-      errorAlert.setContentText("Error al cargar el driver JDBC:\n" + e.getMessage());
-      errorAlert.show();
-    } catch (SQLException e) {
-      errorAlert.setContentText("Error al conectar a la base de datos:\n" + e.getMessage());
-      errorAlert.show();
-    } catch (IOException e) {
-      errorAlert.setContentText("Error al cargar el archivo:\n" + e.getMessage());
-      errorAlert.show();
+        } catch (ClassNotFoundException e) {
+            errorAlert.setContentText("No se encontró el driver de MySQL:\n" + e.getMessage());
+            errorAlert.show();
+        } catch (SQLException e) {
+            errorAlert.setContentText("Error al conectar con la base de datos:\n" + e.getMessage());
+            errorAlert.show();
+            e.printStackTrace();
+        }
+
+        return connection;
     }
-
-    return connection;
-  }
 }

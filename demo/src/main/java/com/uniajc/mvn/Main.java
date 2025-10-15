@@ -1,58 +1,51 @@
 package com.uniajc.mvn;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.application.Application;
 
 public class Main extends Application {
-   
-
 
     @Override
-    public void start(Stage stage) throws Exception {
-
-
-        
-
-
-
-        // 1. Configuración de la ventana principal (Estudiantes)
-        final FXMLLoader estudiantesLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDEstudiantes.fxml"));
-final Scene estudiantesScene = new Scene(estudiantesLoader.load());
-
-stage.setScene(estudiantesScene);
-stage.setTitle("Estudiantes");
-stage.show();
-
-        // 2. Configuración de la ventana de Cursos (Nueva)
+    public void start(Stage stage) {
         try {
-            
-            final FXMLLoader cursosLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDCursos.fxml"));
-            final Stage cursosStage = new Stage();
-            cursosStage.setScene(new Scene(cursosLoader.load()));
-            cursosStage.setTitle("Cursos");
-            cursosStage.show();
+            // === Ventana principal: Estudiantes ===
+            FXMLLoader estudiantesLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDEstudiantes.fxml"));
+            Scene estudiantesScene = new Scene(estudiantesLoader.load());
+            stage.setScene(estudiantesScene);
+            stage.setTitle("Gestión de Estudiantes");
+            stage.show();
+            System.out.println("✅ Interfaz de Estudiantes cargada correctamente.");
+
         } catch (Exception e) {
-            
-            System.err.println("Error al cargar la interfaz de Cursos: " + e.getMessage());
+            System.err.println("❌ Error al cargar la interfaz de Estudiantes: " + e.getMessage());
         }
 
-       
+        // === Ventana de Cursos ===
+        cargarVentana("/vistas/CRUDCurso.fxml", "Gestión de Cursos");
+
+        // === Ventana de Docentes ===
+        cargarVentana("/vistas/CRUDDocente.fxml", "Gestión de Docentes");
+    }
+
+    /**
+     * Método auxiliar para cargar cualquier ventana adicional.
+     */
+    private void cargarVentana(String rutaFXML, String tituloVentana) {
         try {
-            // NOTA: Asumo que el archivo se llama CRUDDocentes.fxml y existe en /views/
-            final FXMLLoader docentesLoader = new FXMLLoader(getClass().getResource("/vistas/CRUDDocentes.fxml"));
-            final Stage docentesStage = new Stage();
-            docentesStage.setScene(new Scene(docentesLoader.load()));
-            docentesStage.setTitle("Docentes");
-            docentesStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            Stage nuevoStage = new Stage();
+            nuevoStage.setScene(new Scene(loader.load()));
+            nuevoStage.setTitle(tituloVentana);
+            nuevoStage.show();
+            System.out.println("✅ Interfaz de " + tituloVentana + " cargada correctamente.");
         } catch (Exception e) {
-            // Manejo de error si no se encuentra o carga el FXML
-            System.err.println("Error al cargar la interfaz de Docentes: " + e.getMessage());
+            System.err.println("❌ Error al cargar la interfaz de " + tituloVentana + ": " + e.getMessage());
         }
     }
 
-    public static void main(String[] args)  {
-        launch();
+    public static void main(String[] args) {
+        launch(args);
     }
-}   
+}
